@@ -243,8 +243,9 @@ void main()
     uint8_t message2[64];
     memset(message, 0x00, sizeof(message));
     message[0] = 0x80;
-    start = clock(); 
-    uint8_t *out = (uint8_t *)malloc(32);
+    start = clock();
+    uint32_t *s = (uint32_t *)malloc(sizeof(uint32_t)*8);
+    uint8_t *out;
     while(t--) {
         /* initial state */
         uint32_t state[8] = {
@@ -257,14 +258,23 @@ void main()
         sha256_process_x86(state, message, M);
         sha256_process_x86(state, message2, 64);
 
-        strcpy(out, (uint8_t *) state);
+        s[0] = state[0];
+        s[1] = state[1];
+        s[2] = state[2];
+        s[3] = state[3];
+        s[4] = state[4];
+        s[5] = state[5];
+        s[6] = state[6];
+        s[7] = state[7];
     }
+    out = (uint8_t*)s;
     finish = clock();
     printf( "%ld ms, %d\n", finish - start, out[1]); 
     for(int i=0; i < 32; ++i) {
         printf("%d ", out[i]);
     }
     printf("\n");
+    free(out);
 }
 
 #endif
