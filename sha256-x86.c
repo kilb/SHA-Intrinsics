@@ -244,6 +244,7 @@ void main()
     memset(message, 0x00, sizeof(message));
     message[0] = 0x80;
     start = clock(); 
+    uint8_t *out;
     while(t--) {
         /* initial state */
         uint32_t state[8] = {
@@ -256,10 +257,10 @@ void main()
         sha256_process_x86(state, message, M);
         sha256_process_x86(state, message2, 64);
 
-        uint8_t *out = (uint8_t *) state;
+        out = (uint8_t *) state;
     }
     finish = clock();
-    printf( "%ld ms\n", finish - start ); 
+    printf( "%ld ms, %d\n", finish - start, out[1]); 
 }
 
 #endif
